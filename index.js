@@ -46,7 +46,7 @@ app.get('/info', (request, response) => {
   const numberOfPersons = persons.length;
 
   response.setHeader('Content-Type', 'text/html');
-  response.send(`
+  response.status(200).send(`
     <h1>Number of persons: ${numberOfPersons}</h1>
     ${persons.map(person => `<p>${person.name}: ${person.number} - Date: ${person.date}</p>`).join('\n')}
   `);
