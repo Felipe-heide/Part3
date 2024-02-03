@@ -7,21 +7,13 @@ const url = process.env.MONGODB_URI ;
 
 console.log('connecting to', url)
 
-async function connectToDatabase() {
-  try {
-    await mongoose.connect('mongodb://your-database-url', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // Add other options if needed
-    });
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error.message);
-    // Handle error appropriately
-  }
-}
-
-connectToDatabase();
+mongoose.connect(url)
+  .then(result => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
 
 
 const personSchema = new mongoose.Schema({
@@ -36,12 +28,12 @@ const personSchema = new mongoose.Schema({
     type: String,
     minlength: 8,
     validate: {
-      validator: function(v) {
-        return /^\d{2,3}-\d+$/.test(v);
-      },
-      message: props => `${props.value} is not a valid phone number! Please use the format xx-xxxxx.`
-    },
-    
+  validator: function(v) {
+    return /^\d{2,3}-\d+$/.test(v);
+  },
+  message: props => `${props.value} is not a valid phone number! Please use the format xx-xxxxx.`
+},
+
 
 
 
