@@ -1,6 +1,0 @@
-PUT https://personsserver2.onrender.com/api/persons/
-Content-Type: application/json
-{
-    "name": "qwr",
-    "number": "12-122112121221"
-    }
