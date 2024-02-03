@@ -103,28 +103,34 @@ app.post('/api/persons', (request, response) => {
     });
 });
 
-app.put('/api/persons/:id', (request, response) => {
-  const { name, number } = request.body
+app.put('/api/persons/:id', async (request, response) => {
+  const { name, number } = request.body;
 
-  if (!body.number) {
+  if (!number) {
     return response.status(400).json({ 
       error: 'number missing' 
     });
   }
+  try {
+    const person = await Person.findOne({ _id: request.params.id });
+    if (!person) {
+      return response.status(404).json({ error: 'Person not found' });
+    }
 
-  Person.findByIdAndUpdate(request.params.id, { name, number },
-    { new: true, runValidators: true, context: 'query' }
-  ) 
-    .then(updatedPerson => {
-      if (updatedPerson) {
-        response.json(updatedPerson);
-      } else {
-        response.status(404).json({ error: 'Person not found' });
-      }
-    })
-    .catch(error => next(error))
+    // Update the fields
+    person.name = name;
+    person.number = number;
 
+    // Save the updated person
+    const updatedPerson = await person.save();
+
+    response.json(updatedPerson);
+  } catch (error) {
+    console.error('Error updating person:', error);
+    response.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
