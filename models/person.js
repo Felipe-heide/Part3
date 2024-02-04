@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
-require('dotenv').config();
+require('dotenv').config()
 
 mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI ;
+const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 
@@ -14,7 +14,6 @@ mongoose.connect(url)
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
   })
-
 
 const personSchema = new mongoose.Schema({
   name: {
@@ -28,18 +27,13 @@ const personSchema = new mongoose.Schema({
     type: String,
     minlength: 8,
     validate: {
-  validator: function(v) {
-    return /^\d{2,3}-\d+$/.test(v);
-  },
-  message: props => `${props.value} is not a valid phone number! Please use the format xx-xxxxx.`
-},
-
-
-
-
+      validator: function (v) {
+        return /^\d{2,3}-\d+$/.test(v)
+      },
+      message: props => `${props.value} is not a valid phone number! Please use the format xx-xxxxx.`
+    },
     required: true,
     unique: true
-
   }
 })
 
@@ -50,6 +44,5 @@ personSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
-
 
 module.exports = mongoose.model('person', personSchema)
